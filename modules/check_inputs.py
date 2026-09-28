@@ -1,18 +1,20 @@
-# input validation functions
-
-def get_marks(subject_title):
+# validating user inputs here
+def get_marks(sub):
     while True:
         try:
-            m = float(input(f"Enter {subject_title} marks (0 to 100): "))
-            if 0 <= m <= 100:
+            m = float(input("Enter marks for " + sub + ": "))
+            if m >= 0 and m <= 100:
                 return m
-            print("Score has to be between 0 and 100. Try once more.")
-        except ValueError:
-            print("Not a valid number. Please type digits only.")
+            else:
+                print("Marks must be between 0 and 100!")
+        except:
+            print("Please enter numbers only.")
 
 def get_reg_number():
     while True:
-        r = input("Enter Registration No: ").strip().upper()
+        r = input("Enter Registration No: ")
+        r = r.strip()
         if len(r) > 0:
             return r
-        print("Registration number is required.")
+        else:
+            print("Registration number cannot be empty!")
