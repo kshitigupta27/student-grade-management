@@ -1,48 +1,32 @@
 # Main Entry Point for Student Grade Management System
 
-from modules.student_records import (
-    add_student,
-    view_all_students,
-    search_student,
-    delete_student
-)
-from modules.grade_calc import display_summary
-from modules.file_handler import read_data
-
-def show_menu():
-    print("\n" + "=" * 45)
-    print("   STUDENT GRADE MANAGEMENT SYSTEM")
-    print("=" * 45)
-    print("1. Add New Student Record")
-    print("2. Display All Student Records")
-    print("3. Search Student by Reg No")
-    print("4. Remove Student Record")
-    print("5. View Class Analytics & Summary")
-    print("6. Exit")
-    print("=" * 45)
-
+from modules.student_records import add_student, show_all, search_student, delete_student
+# menu loop to run the project
 def main():
     while True:
-        show_menu()
-        choice = input("Select an option (1-6): ").strip()
+        print("\n--- STUDENT MANAGEMENT SYSTEM ---")
+        print("1. Add Student")
+        print("2. View All Students")
+        print("3. Search Student")
+        print("4. Delete Student")
+        print("5. Exit")
 
-        if choice == '1':
+        choice = input("Enter your choice (1-5): ").strip()
+
+        if choice == "1":
             add_student()
-        elif choice == '2':
-            view_all_students()
-        elif choice == '3':
+        elif choice == "2":
+            show_all()
+        elif choice == "3":
             search_student()
-        elif choice == '4':
+        elif choice == "4":
             delete_student()
-        elif choice == '5':
-            students = read_data()
-            display_summary(students)
-        elif choice == '6':
-            print("\nExiting program. All data is saved.")
+        elif choice == "5":
+            print("Exiting program. Goodbye!")
             break
         else:
-            print("\nInvalid choice! Please select between 1 and 6.")
+            print("Invalid input. Please choose between 1 and 5.")
 
 if __name__ == "__main__":
     main()
-    
+
