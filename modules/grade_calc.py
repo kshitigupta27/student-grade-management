@@ -1,14 +1,10 @@
-# Logic for grade evaluation and batch summary
-
-# functions for average and grading
+# calculate average
 def find_average(m1, m2, m3):
-    # simple 3 subject average
     total = m1 + m2 + m3
     avg = total / 3
     return round(avg, 2)
 
 def find_grade(avg):
-    # grade mapping based on percentage
     if avg >= 90:
         return "S"
     elif avg >= 80:
