@@ -1,7 +1,6 @@
-# Main Entry Point for Student Grade Management System
+# student grade project
 
 from modules.student_records import add_student, show_all, search_student, delete_student
-# menu loop to run the project
 def main():
     while True:
         print("\n--- STUDENT MANAGEMENT SYSTEM ---")
