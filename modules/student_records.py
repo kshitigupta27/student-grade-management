@@ -1,14 +1,18 @@
-from modules.file_handler import read_data, write_data
-from modules.grade_calc import find_grade
+# main logic for adding, searching, deleting students
+from modules.file_handler import load_data, save_data
 from modules.check_inputs import get_marks, get_reg_number
+from modules.grade_calc import find_average, find_grade
+
+FILE = "student_records.csv"
 
 def add_student():
-    records = read_data()
+    # add new student if reg no not already present
+    records = load_data(FILE)
     reg = get_reg_number()
 
     for s in records:
         if s["RegNo"] == reg:
-            print("Record with this Registration No already exists!")
+            print("Student already exists with this registration number!")
             return
 
     name = input("Enter Student Name: ").strip()
@@ -16,58 +20,66 @@ def add_student():
     m2 = get_marks("Subject 2")
     m3 = get_marks("Subject 3")
 
-    avg = round((m1 + m2 + m3) / 3, 2)
+    avg = find_average(m1, m2, m3)
     grade = find_grade(avg)
 
-    new_entry = {
+    new_student = {
         "RegNo": reg,
         "Name": name,
-        "Mark1": m1,
-        "Mark2": m2,
-        "Mark3": m3,
-        "Average": avg,
+        "Subject1": str(m1),
+        "Subject2": str(m2),
+        "Subject3": str(m3),
+        "Average": str(avg),
         "Grade": grade
     }
 
-    records.append(new_entry)
-    write_data(records)
-    print(f"\nStudent {name} added successfully with Grade {grade}!")
+    records.append(new_student)
+    save_data(FILE, records)
+    print("Student added successfully!")
 
-def view_all_students():
-    records = read_data()
-    if not records:
-        print("\nNo student records found.")
+def show_all():
+    # display all saved records
+    records = load_data(FILE)
+    if len(records) == 0:
+        print("No student records found.")
         return
 
-    print("\n" + "-" * 75)
-    print(f"{'Reg No':<12}{'Name':<20}{'M1':<8}{'M2':<8}{'M3':<8}{'Avg':<10}{'Grade':<6}")
-    print("-" * 75)
+    print("\n--- Student List ---")
     for s in records:
-        print(f"{s['RegNo']:<12}{s['Name']:<20}{s['Mark1']:<8}{s['Mark2']:<8}{s['Mark3']:<8}{s['Average']:<10.2f}{s['Grade']:<6}")
-    print("-" * 75)
+        print("Reg No:", s["RegNo"], "| Name:", s["Name"], "| Average:", s["Average"], "| Grade:", s["Grade"])
 
 def search_student():
-    records = read_data()
-    reg = input("Enter Registration No to search: ").strip().upper()
+    # find student by reg no
+    records = load_data(FILE)
+    reg = input("Enter Reg No to search: ").strip()
 
     for s in records:
         if s["RegNo"] == reg:
-            print("\n--- Student Found ---")
-            print(f"Reg No  : {s['RegNo']}")
-            print(f"Name    : {s['Name']}")
-            print(f"Marks   : {s['Mark1']}, {s['Mark2']}, {s['Mark3']}")
-            print(f"Average : {s['Average']}%")
-            print(f"Grade   : {s['Grade']}")
+            print("\nStudent Found:")
+            print("Reg No:", s["RegNo"])
+            print("Name:", s["Name"])
+            print("Marks:", s["Subject1"], s["Subject2"], s["Subject3"])
+            print("Average:", s["Average"])
+            print("Grade:", s["Grade"])
             return
-    print("\nNo student found with that registration number.")
+
+    print("Student not found!")
 
 def delete_student():
-    records = read_data()
-    reg = input("Enter Registration No to delete: ").strip().upper()
+    # remove student from csv
+    records = load_data(FILE)
+    reg = input("Enter Reg No to delete: ").strip()
+    found = False
 
-    updated = [s for s in records if s["RegNo"] != reg]
-    if len(updated) == len(records):
-        print("\nRecord not found.")
+    new_records = []
+    for s in records:
+        if s["RegNo"] == reg:
+            found = True
+        else:
+            new_records.append(s)
+
+    if found:
+        save_data(FILE, new_records)
+        print("Record deleted successfully.")
     else:
-        write_data(updated)
-        print(f"\nRecord for {reg} deleted successfully.")
+        print("Record not found, nothing deleted.")
